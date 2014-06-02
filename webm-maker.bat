@@ -18,11 +18,11 @@ if "%~1" == "" (
 echo - Finding ffmpeg.exe
 echo - Looking up "%~d0\Program Files"
 cd "%~d0\Program Files"
-for /f "delims=" %%f in ('dir /s /b /a-d "ffsmpeg.exe"') do (set encoder=%%f)
+for /f "delims=" %%f in ('dir /s /b /a-d "ffmpeg.exe"') do (set encoder=%%f)
 if "%encoder%" == "" (
 	echo - Trying "%~d0\Program Files (x86)" instead
 	cd "%~d0\Program Files (x86)"
-	for /f "delims=" %%f in ('dir /s /b /a-d "ffsmpeg.exe"') do (set encoder=%%f)
+	for /f "delims=" %%f in ('dir /s /b /a-d "ffmpeg.exe"') do (set encoder=%%f)
 	if "!encoder!" == "" (
 		if not "%customlocation%" == "" (
 			echo - Custom location specified
