@@ -4,9 +4,11 @@
 setlocal enabledelayedexpansion
 :: Max 4chan file size for webm's
 set max_file_size=3072
+:: Custom location to look for ffmpeg, NEEDS TO BE THE FULL PATH
+set customlocation=
 
 :: Check if script was started with a proper parameter ::
-if "%1" == "" (
+if "%~1" == "" (
 	echo - This script needs to be run by dropping a video file on it. It cannot do anything by itself.
 	pause
 	goto :EOF
@@ -14,32 +16,35 @@ if "%1" == "" (
 
 :: Find ffmpeg folder and its binary file ::
 echo - Finding ffmpeg.exe
-cd %~d0\
-cd "Program Files"
 echo - Looking up "%~d0\Program Files"
-for /f "delims=" %%f in ('dir /s /b /a-d "ffmpeg.exe"') do (set encoder=%%f)
-if not "%encoder%" == "" ( 
-	echo - Found encoder at %encoder%
-) else (
-	cd %~d0\
-	cd "Program Files (x86)"
-	echo - Trying "!cd!" instead
-	for /f "delims=" %%f in ('dir /s /b /a-d "ffmpeg.exe"') do (set encoder=%%f)
-	if not "!encoder!" == "" (
-		echo - Found encoder at !encoder!
-	) else (
-		echo - Nothing found, install ffmpeg first, then try again
-		pause
-		:: exit script
-		exit
+cd "%~d0\Program Files"
+for /f "delims=" %%f in ('dir /s /b /a-d "ffsmpeg.exe"') do (set encoder=%%f)
+if "%encoder%" == "" (
+	echo - Trying "%~d0\Program Files (x86)" instead
+	cd "%~d0\Program Files (x86)"
+	for /f "delims=" %%f in ('dir /s /b /a-d "ffsmpeg.exe"') do (set encoder=%%f)
+	if "!encoder!" == "" (
+		if not "%customlocation%" == "" (
+			echo - Custom location specified
+			echo - Trying %customlocation% instead
+			cd "%customlocation%"
+			for /f "delims=" %%f in ('dir /s /b /a-d "ffmpeg.exe"') do (set encoder=%%f)
+		)
 	)
 )
+if "%encoder%" == "" (
+	echo - Nothing found, make sure ffmpeg is installed and in the proper folders. Default is Program Files and Program Files x86 of the current partition
+	pause
+	goto :EOF
+)
+:: Ffmpeg was found at this point
+echo - FFMPEG was found in "%encoder%"
 
-:: Ffmpeg was found at this point, time for some setup
+:: Time for some setup
 cd %~d0\
 cd %~p0
 :: Ask user how big the webm should be
-echo - Enter vertical desired resolution ( ie 720 for 720p ). Aspect ratio will be maintained
+echo - Enter vertical desired resolution. Example: 720 for 720p. Aspect ratio will be maintained
 set /p resolution="Enter: " %=%
 :: Ask user where to start webm rendering in source video
 echo - Enter start of webm rendering in source video in SECONDS
@@ -52,8 +57,8 @@ set /a bitrate=8*%max_file_size%/%length%
 echo - Target bitrate set to %bitrate%
 
 :: Two stage encoding
-"%encoder%" -i %1 -c:v libvpx -b:v %bitrate%k -vf scale=-1:%resolution% -crf 10 -ss %start% -t %length% -an -threads 0 -f webm -pass 1 -y NUL
-"%encoder%" -i %1 -c:v libvpx -b:v %bitrate%k -vf scale=-1:%resolution% -crf 10 -ss %start% -t %length% -an -threads 0 -pass 2 -y "%~n1.webm"
+"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%k -vf scale=-1:%resolution% -crf 10 -ss %start% -t %length% -an -threads 0 -f webm -pass 1 -y NUL
+"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%k -vf scale=-1:%resolution% -crf 10 -ss %start% -t %length% -an -threads 0 -pass 2 -y "%~n1.webm"
 del ffmpeg2pass-0.log
 
 echo.
