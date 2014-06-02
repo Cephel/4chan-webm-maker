@@ -27,7 +27,7 @@ if "%encoder%" == "" (
 		if not "%customlocation%" == "" (
 			echo Custom location specified.
 			echo Trying %customlocation% instead.
-			cd "%customlocation%"
+			cd /d "%customlocation%"
 			for /f "delims=" %%f in ('dir /s /b /a-d "ffmpeg.exe"') do (set encoder=%%f)
 		)
 	)
@@ -42,7 +42,7 @@ echo ffmpeg.exe was found: "%encoder%"
 echo.
 
 :: Time for some setup
-cd "%~dp0"
+cd /d "%~dp0"
 :: Ask user how big the webm should be
 echo Enter vertical desired resolution. Example: 720 for 720p. Aspect ratio will be maintained. Entering nothing will render at source resolution.
 set /p resolution="Enter: " %=%
