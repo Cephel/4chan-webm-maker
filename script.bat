@@ -38,6 +38,9 @@ if not "%encoder%" == "" (
 :: Ffmpeg was found at this point, time for some setup
 cd %~d0\
 cd %~p0
+:: Ask user how big the webm should be
+echo - Enter vertical desired resolution ( ie 720 for 720p ). Aspect ratio will be maintained
+set /p resolution="Enter: " %=%
 :: Ask user where to start webm rendering in source video
 echo - Enter start of webm rendering in source video in SECONDS
 set /p start="Enter: " %=%
@@ -49,8 +52,8 @@ set /a bitrate=8*%max_file_size%/%length%
 echo - Target bitrate set to %bitrate%
 
 :: Two stage encoding
-"%encoder%" -i %1 -c:v libvpx -b:v %bitrate%k -vf scale=-1:720 -crf 10 -ss %start% -t %length% -an -threads 0 -f webm -pass 1 -y NUL
-"%encoder%" -i %1 -c:v libvpx -b:v %bitrate%k -vf scale=-1:720 -crf 10 -ss %start% -t %length% -an -threads 0 -pass 2 -y "%~n1.webm"
+"%encoder%" -i %1 -c:v libvpx -b:v %bitrate%k -vf scale=-1:%resolution% -crf 10 -ss %start% -t %length% -an -threads 0 -f webm -pass 1 -y NUL
+"%encoder%" -i %1 -c:v libvpx -b:v %bitrate%k -vf scale=-1:%resolution% -crf 10 -ss %start% -t %length% -an -threads 0 -pass 2 -y "%~n1.webm"
 del ffmpeg2pass-0.log
 
 echo.
