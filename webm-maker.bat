@@ -2,8 +2,8 @@
 
 :: Necessary for some loop and branching operations ::
 setlocal enabledelayedexpansion
-:: Max 4chan file size for webm's
-set max_file_size=3072
+:: Max 4chan file size for webm's, slightly reduced because ffmpeg averages the bitrate and it can become slightly bigger than the max size, even with perfect calculation
+set max_file_size=3000
 :: Custom location to look for ffmpeg, NEEDS TO BE THE FULL PATH
 set customlocation=
 
@@ -76,8 +76,8 @@ set /a bitrate=8*%max_file_size%/%length%
 echo Target bitrate set to %bitrate%
 
 :: Two stage encoding
-"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%K %resolutionset% %startset% %lengthset% -an -threads 0 -f webm -pass 1 -y NUL
-"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%K %resolutionset% %startset% %lengthset% -an -threads 0 -pass 2 -y "%~n1.webm"
+"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%K -quality best %resolutionset% %startset% %lengthset% -an -threads 0 -f webm -pass 1 -y NUL
+"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%K -quality best %resolutionset% %startset% %lengthset% -an -threads 0 -pass 2 -y "%~n1.webm"
 del ffmpeg2pass-0.log
 goto :EOF
 
