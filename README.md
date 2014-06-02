@@ -15,6 +15,7 @@ Usage
 -----
 1. Download ffmpeg here: http://ffmpeg.zeranoe.com/builds/. This is used to encode videos to the webm format.
   - The script only looks for ffmpeg in the Program Files and Program Files (x86) folders of the **current partition this script is executed in**. This is because looking for the encoder takes way too long otherwise. This means you must install ffmpeg in either location.
+  - You can specify a custom location by editing the corresponding line at the top of the script. The script will also look in that location for ffmpeg.exe if you define a custom location.
 2. Put the script somewhere you can access it nicely.
   - Make sure the script resides in the same **partition** as your ffmpeg install. This also helps driving down lookup time.
 4. Drag a video file onto the script.
