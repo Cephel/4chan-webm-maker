@@ -4,8 +4,13 @@
 setlocal enabledelayedexpansion
 :: Max 4chan file size for webm's
 set max_file_size=3072
-:: File name from parameters ( ie. dropping the file on the script ) ::
-echo - Source file "%~nx1"
+
+:: Check if script was started with a proper parameter ::
+if "%1" == "" (
+	echo - This script needs to be run by dropping a video file on it. It cannot do anything by itself.
+	pause
+	goto :EOF
+)
 
 :: Find ffmpeg folder and its binary file ::
 echo - Finding ffmpeg.exe
