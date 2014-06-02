@@ -76,8 +76,8 @@ set /a bitrate=8*%max_file_size%/%length%
 echo Target bitrate set to %bitrate%
 
 :: Two stage encoding
-"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%K %resolutionset% -crf 10 %startset% %lengthset% -an -threads 0 -f webm -pass 1 -y NUL
-"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%K %resolutionset% -crf 10 %startset% %lengthset% -an -threads 0 -pass 2 -y "%~n1.webm"
+"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%K %resolutionset% %startset% %lengthset% -an -threads 0 -f webm -pass 1 -y NUL
+"%encoder%" -i "%~1" -c:v libvpx -b:v %bitrate%K %resolutionset% %startset% %lengthset% -an -threads 0 -pass 2 -y "%~n1.webm"
 del ffmpeg2pass-0.log
 goto :EOF
 
