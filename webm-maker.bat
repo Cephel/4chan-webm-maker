@@ -13,27 +13,35 @@ if "%~1" == "" (
 	goto :EOF
 )
 
+:: Hello user
+echo 4chan webm maker
+echo by Cephei
+
 :: Time for some setup
 cd /d "%~dp0"
 :: Ask user how big the webm should be
-echo Webm render resolution. Example: 720 for 720p.
-echo Aspect ratio stays the same.
-echo Default: Source resolution.
+echo Please enter webm render resolution.
+echo Example: 720 for 720p.
+echo Default: Source video resolution.
 set /p resolution="Enter: " %=%
 if not "%resolution%" == "" (
 	set resolutionset=-vf scale=-1:%resolution%
 )
 echo.
+
 :: Ask user where to start webm rendering in source video
-echo Offset for webm rendering in SECONDS.
-echo Default: Start of the source video.
+echo Please enter webm rendering offset in SECONDS.
+echo Example: 31
+echo Default: Start of source video.
 set /p start="Enter: " %=%
 if not "%start%" == "" (
 	set startset=-ss %start%
 )
 echo.
+
 :: Ask user for length of rendering
-echo Webm rendering length in SECONDS.
+echo Please enter webm rendering length in SECONDS.
+echo Example: 15
 echo Default: Entire source video.
 set /p length="Enter: " %=%
 if not "%length%" == "" (
@@ -47,11 +55,12 @@ if not "%length%" == "" (
 	echo Using source video length: !length! seconds
 )
 echo.
+
 :: find bitrate that maxes out max filesize on 4chan, defined above
 set /a bitrate=8*%max_file_size%/%length%
 echo Target bitrate: %bitrate%
 
-:: Two stage encoding
+:: Two pass encoding because reasons
 ffmpeg.exe -i "%~1" -c:v libvpx -b:v %bitrate%K -quality best %resolutionset% %startset% %lengthset% -an -threads 0 -f webm -pass 1 -y NUL
 ffmpeg.exe -i "%~1" -c:v libvpx -b:v %bitrate%K -quality best %resolutionset% %startset% %lengthset% -an -threads 0 -pass 2 -y "%~n1.webm"
 del ffmpeg2pass-0.log
