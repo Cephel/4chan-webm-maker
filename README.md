@@ -4,8 +4,10 @@ A handy little script that automates most steps involved in creating webm's for 
 
 Features
 --------
-- Simple drag and drop functionality. No messing around with the command line or arguments.
-- Bundled ffmpeg. No extra stuff to download. Works out of the box.
+- Ultra lightweight portable setup. No messing around with libraries and no install required.
+- No bloat, just a scriptfile, no unecessary GUI, no heavyweight libraries to run it, no bloated functionality that nobody ever uses.
+- Simple drag and drop action. No messing around with the command line or arguments.
+- All dependencies included. No extra stuff to download and mess with.
 - Automatic quality settings to attempt to max out file size limitations on 4chan
   - Read: "Tries to make it look as good as possible".
 - Easy on-screen prompts to change offset and length of webm rendering. No editing necessary to extract "that one good part".
