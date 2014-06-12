@@ -57,7 +57,7 @@ if not "%length%" == "" (
 )
 echo.
 
-:: find bitrate that maxes out max filesize on 4chan, defined above ::
+:: Find bitrate that maxes out max filesize on 4chan, defined above ::
 set /a bitrate=8*%max_file_size%/%length%
 echo Target bitrate: %bitrate%
 
