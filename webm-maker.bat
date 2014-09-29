@@ -3,7 +3,7 @@
 :: Necessary for some loop and branching operations ::
 setlocal enabledelayedexpansion
 :: Max 4chan file size for webm's, slightly reduced because ffmpeg averages the bitrate and it can become slightly bigger than the max size, even with perfect calculation
-set max_file_size=3000
+set max_file_size=2900
 
 :: Check if script was started with a proper parameter ::
 if "%~1" == "" (
